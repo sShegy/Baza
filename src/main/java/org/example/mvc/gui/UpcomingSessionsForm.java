@@ -1,0 +1,72 @@
+package org.example.mvc.gui;
+
+
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import org.example.mvc.dao.SeansaDAO;
+import org.example.mvc.model.Psihoterapeut;
+import org.example.mvc.model.Seansa;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UpcomingSessionsForm {
+    private final Stage stage;
+    private final Psihoterapeut therapist;
+
+    public UpcomingSessionsForm(Stage stage, Psihoterapeut therapist) {
+        this.stage = stage;
+        this.therapist = therapist;
+        initUI();
+    }
+
+    private void initUI() {
+        TableView<Seansa> table = new TableView<>();
+        TableColumn<Seansa, LocalDate> colDatum = new TableColumn<>("Datum");
+        colDatum.setCellValueFactory(new PropertyValueFactory<>("datum"));
+        TableColumn<Seansa, LocalTime> colVreme = new TableColumn<>("Vreme");
+        colVreme.setCellValueFactory(new PropertyValueFactory<>("vreme"));
+        TableColumn<Seansa, Integer> colTrajanje = new TableColumn<>("Trajanje (min)");
+        colTrajanje.setCellValueFactory(new PropertyValueFactory<>("trajanje"));
+        TableColumn<Seansa, String> colBeleske = new TableColumn<>("Beleške");
+        colBeleske.setCellValueFactory(new PropertyValueFactory<>("beleške"));
+        table.getColumns().addAll(colDatum, colVreme, colTrajanje, colBeleske);
+
+        // Učitaj sve seanse, filtriraj po terapeut id i datumu >= danas
+        try {
+            List<Seansa> all = new SeansaDAO().findAll();
+            List<Seansa> upcoming = all.stream()
+                    .filter(s -> s.getPsihoterapeutId() == therapist.getId())
+                    .filter(s -> !s.getDatum().isBefore(LocalDate.now()))
+                    .collect(Collectors.toList());
+            table.setItems(FXCollections.observableArrayList(upcoming));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Button btnBack = new Button("Nazad");
+        btnBack.setOnAction(e -> new MainForm(stage, therapist));
+        HBox hbox = new HBox(10, btnBack);
+        hbox.setPadding(new Insets(10));
+
+        BorderPane root = new BorderPane();
+        root.setCenter(table);
+        root.setBottom(hbox);
+        BorderPane.setMargin(table, new Insets(10));
+
+        Scene scene = new Scene(root, 800, 600);
+        stage.setScene(scene);
+        stage.setTitle("Buduće seanse - " + therapist.getIme());
+        stage.show();
+    }
+}
