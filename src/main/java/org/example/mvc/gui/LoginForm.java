@@ -1,11 +1,12 @@
 package org.example.mvc.gui;
 
-
-
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.mvc.dao.PsihoterapeutDAO;
 import org.example.mvc.model.Psihoterapeut;
@@ -19,28 +20,44 @@ public class LoginForm {
     }
 
     private void initUI() {
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(20));
-        grid.setHgap(10);
-        grid.setVgap(10);
+        // Root sa gradient pozadinom
+        StackPane root = new StackPane();
+        root.getStyleClass().add("root-pane");
 
-        Label lblEmail = new Label("Email:");
+        // Kartica u centru
+        VBox card = new VBox(15);
+        card.setPadding(new Insets(30));
+        card.setAlignment(Pos.CENTER);
+        card.getStyleClass().add("card");
+
+        // Logo / ikonica
+        ImageView icon = new ImageView(new Image(getClass().getResourceAsStream("/images/logo.png")));
+        icon.setFitWidth(80);
+        icon.setPreserveRatio(true);
+
+        Label lblTitle = new Label("Novi Početak");
+        lblTitle.getStyleClass().add("login-title");
+
         TextField tfEmail = new TextField();
-        Label lblPass = new Label("Lozinka:");
+        tfEmail.setPromptText("Email");
+        tfEmail.getStyleClass().add("input-field");
+
         PasswordField pfPass = new PasswordField();
+        pfPass.setPromptText("Lozinka");
+        pfPass.getStyleClass().add("input-field");
+
         Button btnLogin = new Button("Prijava");
-
-        grid.add(lblEmail, 0, 0);
-        grid.add(tfEmail, 1, 0);
-        grid.add(lblPass, 0, 1);
-        grid.add(pfPass, 1, 1);
-        grid.add(btnLogin, 1, 2);
-
+        btnLogin.getStyleClass().add("btn-primary");
         btnLogin.setOnAction(e -> handleLogin(tfEmail.getText().trim(), pfPass.getText().trim()));
 
-        Scene scene = new Scene(grid);
+        card.getChildren().addAll(icon, lblTitle, tfEmail, pfPass, btnLogin);
+        root.getChildren().add(card);
+
+        Scene scene = new Scene(root, 450, 350);
+        scene.getStylesheets().add(getClass().getResource("/styles/login2.css").toExternalForm());
+
         stage.setScene(scene);
-        stage.setTitle("Savetovalište Novi početak - Prijava");
+        stage.setTitle("Savetovalište Novi početak – Prijava");
         stage.show();
     }
 
@@ -48,8 +65,7 @@ public class LoginForm {
         try {
             Psihoterapeut p = new PsihoterapeutDAO().findByEmailAndPassword(email, password);
             if (p != null) {
-                // Uspešna prijava, prikaz glavne forme
-                new MainForm(stage,p);
+                new MainForm(stage, p);
             } else {
                 new Alert(Alert.AlertType.ERROR, "Neispravni podaci za prijavu").showAndWait();
             }
@@ -59,4 +75,3 @@ public class LoginForm {
         }
     }
 }
-
