@@ -1,5 +1,5 @@
+// src/main/java/org/example/mvc/gui/MainForm.java
 package org.example.mvc.gui;
-
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.example.mvc.dao.PsihoterapeutDAO;
 import org.example.mvc.model.Psihoterapeut;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class MainForm {
@@ -27,18 +28,37 @@ public class MainForm {
     }
 
     private void initUI() {
-        // Tabela sa svim psihoterapeutima
+        // Tabela sa svim kolona Psihoterapeuta
         TableView<Psihoterapeut> table = new TableView<>();
+
         TableColumn<Psihoterapeut, Integer> colId = new TableColumn<>("ID");
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<Psihoterapeut, String> colIme = new TableColumn<>("Ime");
         colIme.setCellValueFactory(new PropertyValueFactory<>("ime"));
         TableColumn<Psihoterapeut, String> colPrezime = new TableColumn<>("Prezime");
         colPrezime.setCellValueFactory(new PropertyValueFactory<>("prezime"));
+        TableColumn<Psihoterapeut, String> colJmbg = new TableColumn<>("JMBG");
+        colJmbg.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
+        TableColumn<Psihoterapeut, LocalDate> colDatumRodjenja = new TableColumn<>("Datum Rođenja");
+        colDatumRodjenja.setCellValueFactory(new PropertyValueFactory<>("datumRodjenja"));
+        TableColumn<Psihoterapeut, String> colPrebivaliste = new TableColumn<>("Prebivalište");
+        colPrebivaliste.setCellValueFactory(new PropertyValueFactory<>("prebivaliste"));
+        TableColumn<Psihoterapeut, String> colTelefon = new TableColumn<>("Telefon");
+        colTelefon.setCellValueFactory(new PropertyValueFactory<>("telefon"));
         TableColumn<Psihoterapeut, String> colEmail = new TableColumn<>("Email");
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        table.getColumns().addAll(colId, colIme, colPrezime, colEmail);
+        TableColumn<Psihoterapeut, Integer> colOblastId = new TableColumn<>("Oblast ID");
+        colOblastId.setCellValueFactory(new PropertyValueFactory<>("oblastId"));
+        TableColumn<Psihoterapeut, LocalDate> colDatumSert = new TableColumn<>("Datum Sertifikacije");
+        colDatumSert.setCellValueFactory(new PropertyValueFactory<>("datumSertifikacije"));
 
+        table.getColumns().addAll(
+                colId, colIme, colPrezime,
+                colJmbg, colDatumRodjenja, colPrebivaliste,
+                colTelefon, colEmail, colOblastId, colDatumSert
+        );
+
+        // Učitavanje podataka
         try {
             List<Psihoterapeut> list = new PsihoterapeutDAO().findAll();
             table.setItems(FXCollections.observableArrayList(list));
@@ -66,7 +86,7 @@ public class MainForm {
         root.setCenter(table);
         root.setTop(hbox);
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
         stage.setTitle("Glavna forma - dobrodošli, " + loggedIn.getIme());
         stage.show();
