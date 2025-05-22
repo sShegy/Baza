@@ -14,6 +14,7 @@ public class Psihoterapeut {
     private int oblastId;
     private LocalDate datumSertifikacije;
     private String password;
+    private String oblastNaziv;
 
     public Psihoterapeut() {}
 
@@ -119,4 +120,8 @@ public class Psihoterapeut {
     public void setDatumSertifikacije(LocalDate datumSertifikacije) {
         this.datumSertifikacije = datumSertifikacije;
     }
+
+    public String getOblastNaziv() {return oblastNaziv;}
+
+    public void setOblastNaziv(String oblastNaziv) {this.oblastNaziv = oblastNaziv;}
 }

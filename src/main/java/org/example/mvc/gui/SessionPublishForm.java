@@ -74,7 +74,6 @@ public class SessionPublishForm {
 
     private void handleSave(String primalac, LocalDate datum, String razlog) {
         try {
-            // TODO: implement model.ObjavaPodataka and dao.ObjavaPodatakaDAO
             ObjavaPodataka objava = new ObjavaPodataka(seansa.getId(), primalac, datum, razlog);
             new ObjavaPodatakaDAO().save(objava);
             new Alert(Alert.AlertType.INFORMATION, "Objava uspešno sačuvana").showAndWait();

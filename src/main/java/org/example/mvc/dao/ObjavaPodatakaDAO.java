@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ObjavaPodatakaDAO {
     public void save(ObjavaPodataka o) throws SQLException {
-        String sql = "INSERT INTO objava_podataka (seansa_id, primalac, datum_objave, razlog) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO objava_podataka (seansa_id, primaoc, datum, razlog) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, o.getSeansaId());
@@ -38,8 +38,8 @@ public class ObjavaPodatakaDAO {
                     ObjavaPodataka o = new ObjavaPodataka();
                     o.setId(rs.getInt("id"));
                     o.setSeansaId(rs.getInt("seansa_id"));
-                    o.setPrimalac(rs.getString("primalac"));
-                    o.setDatumObjave(rs.getDate("datum_objave").toLocalDate());
+                    o.setPrimalac(rs.getString("primaoc"));
+                    o.setDatumObjave(rs.getDate("datum").toLocalDate());
                     o.setRazlog(rs.getString("razlog"));
                     return o;
                 }
@@ -57,16 +57,17 @@ public class ObjavaPodatakaDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     ObjavaPodataka o = new ObjavaPodataka();
-                    o.setId(rs.getInt("id"));
+                    o.setId(rs.getInt("id_objava"));
                     o.setSeansaId(rs.getInt("seansa_id"));
-                    o.setPrimalac(rs.getString("primalac"));
-                    o.setDatumObjave(rs.getDate("datum_objave").toLocalDate());
+                    o.setDatumObjave(rs.getDate("datum").toLocalDate());
                     o.setRazlog(rs.getString("razlog"));
+                    o.setPrimalac(rs.getString("primaoc"));
                     list.add(o);
                 }
             }
         }
         return list;
     }
+
 }
 

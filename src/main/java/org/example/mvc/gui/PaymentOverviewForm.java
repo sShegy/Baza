@@ -32,19 +32,21 @@ public class PaymentOverviewForm {
         TableView<Uplata> table = new TableView<>();
         TableColumn<Uplata, Integer> colId = new TableColumn<>("ID");
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Uplata, Integer> colClientId = new TableColumn<>("Klijent ID");
-        colClientId.setCellValueFactory(new PropertyValueFactory<>("klijentId"));
+        TableColumn<Uplata, String> colClientId = new TableColumn<>("Klijent");
+        colClientId.setCellValueFactory(new PropertyValueFactory<>("klijentFullName"));
         TableColumn<Uplata, String> colSvrha = new TableColumn<>("Svrha");
         colSvrha.setCellValueFactory(new PropertyValueFactory<>("svrha"));
         TableColumn<Uplata, Integer> colRata = new TableColumn<>("Rata");
         colRata.setCellValueFactory(new PropertyValueFactory<>("rata"));
         TableColumn<Uplata, String> colValuta = new TableColumn<>("Valuta");
-        colValuta.setCellValueFactory(new PropertyValueFactory<>("valuta"));
+        colValuta.setCellValueFactory(new PropertyValueFactory<>("valutaNaziv"));
         TableColumn<Uplata, String> colNacin = new TableColumn<>("Način");
         colNacin.setCellValueFactory(new PropertyValueFactory<>("nacin"));
         TableColumn<Uplata, BigDecimal> colIznos = new TableColumn<>("Iznos");
         colIznos.setCellValueFactory(new PropertyValueFactory<>("iznos"));
-        table.getColumns().addAll(colId, colClientId, colSvrha, colRata, colValuta, colNacin, colIznos);
+        TableColumn<Uplata, String> colDatum = new TableColumn<>("Datum");
+        colDatum.setCellValueFactory(new PropertyValueFactory<>("datum"));
+        table.getColumns().addAll(colId, colClientId, colSvrha, colRata, colValuta, colNacin, colIznos, colDatum);
 
         try {
             List<Uplata> all = new UplataDAO().findAll();

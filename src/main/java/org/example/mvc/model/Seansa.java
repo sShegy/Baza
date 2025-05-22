@@ -11,18 +11,25 @@ public class Seansa {
     private LocalDate datum;
     private LocalTime vreme;
     private int trajanje; // u minutima
-    private String beleške;
+    private String beleske;
+    private int vodeci_korisnik;
+    private int pod_supervizijom;
+
+    private String klijentFullName;
+    private String terapeutFullName;
 
     public Seansa() {}
 
     public Seansa(int psihoterapeutId, int klijentId, LocalDate datum,
-                  LocalTime vreme, int trajanje, String beleške) {
+                  LocalTime vreme, int trajanje, String beleske, int vodeci_korisnik, int pod_supervizijom) {
         this.psihoterapeutId = psihoterapeutId;
         this.klijentId = klijentId;
         this.datum = datum;
         this.vreme = vreme;
         this.trajanje = trajanje;
-        this.beleške = beleške;
+        this.beleske = beleske;
+        this.vodeci_korisnik = vodeci_korisnik;
+        this.pod_supervizijom = pod_supervizijom;
     }
 
     // getters i setters...
@@ -38,7 +45,24 @@ public class Seansa {
     public void setVreme(LocalTime vreme) { this.vreme = vreme; }
     public int getTrajanje() { return trajanje; }
     public void setTrajanje(int trajanje) { this.trajanje = trajanje; }
-    public String getBeleške() { return beleške; }
-    public void setBeleške(String beleške) { this.beleške = beleške; }
+    public String getBeleske() { return beleske; }
+    public void setBeleske(String beleske) { this.beleske = beleske; }
+    public int getVodeci_korisnik() { return vodeci_korisnik; }
+    public int getPod_supervizijom() {return pod_supervizijom;}
+    public void setPod_supervizijom(int pod_supervizijom) {this.pod_supervizijom = pod_supervizijom;}
+    public void setVodeci_korisnik(int vodeci_korisnik) {this.vodeci_korisnik = vodeci_korisnik;}
+    public String getKlijentFullName() {
+        return klijentFullName;
+    }
+    public void setKlijentFullName(String klijentFullName) {
+        this.klijentFullName = klijentFullName;
+    }
+
+    public String getTerapeutFullName() {
+        return terapeutFullName;
+    }
+    public void setTerapeutFullName(String terapeutFullName) {
+        this.terapeutFullName = terapeutFullName;
+    }
 }
 

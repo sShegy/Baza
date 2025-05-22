@@ -10,11 +10,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.mvc.dao.KlijentDAO;
 import org.example.mvc.model.Klijent;
 import org.example.mvc.model.Psihoterapeut;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ClientSignupsForm {
@@ -39,8 +42,16 @@ public class ClientSignupsForm {
         colTelefon.setCellValueFactory(new PropertyValueFactory<>("telefon"));
         TableColumn<Klijent, String> colEmail = new TableColumn<>("Email");
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        TableColumn<Klijent, String> colDatumRodjenja = new TableColumn<>("Datum rođenja");
+        colDatumRodjenja.setCellValueFactory(new PropertyValueFactory<>("datumRodjenja"));
+        TableColumn<Klijent, Integer> colImaoPsihoterapiju = new TableColumn<>("Imao psihoterapiju");
+        colImaoPsihoterapiju.setCellValueFactory(new PropertyValueFactory<>("imao_psihoterapiju"));
+        TableColumn<Klijent, String> colOpisProblema = new TableColumn<>("Opis problema");
+        colOpisProblema.setCellValueFactory(new PropertyValueFactory<>("opis_problema"));
+        TableColumn<Klijent, String> colPol = new TableColumn<>("Pol");
+        colPol.setCellValueFactory(new PropertyValueFactory<>("pol"));
 
-        table.getColumns().addAll(colId, colIme, colPrezime, colTelefon, colEmail);
+        table.getColumns().addAll(colId, colIme, colPrezime,colDatumRodjenja,colPol, colTelefon, colEmail, colImaoPsihoterapiju, colOpisProblema);
 
         try {
             List<Klijent> list = new KlijentDAO().findAll();
@@ -51,7 +62,8 @@ public class ClientSignupsForm {
 
         Button btnBack = new Button("Nazad");
         btnBack.setOnAction(e -> new MainForm(stage, therapist));
-        HBox hbox = new HBox(10, btnBack);
+
+        HBox hbox = new HBox(10,/*btnAdd*/ btnBack);
         hbox.setPadding(new Insets(10));
 
         BorderPane root = new BorderPane();

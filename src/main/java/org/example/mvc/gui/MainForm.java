@@ -4,6 +4,7 @@ package org.example.mvc.gui;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,7 +27,6 @@ public class MainForm {
         this.loggedIn = loggedIn;
         initUI();
     }
-
     private void initUI() {
         // Tabela sa svim kolona Psihoterapeuta
         TableView<Psihoterapeut> table = new TableView<>();
@@ -47,15 +47,15 @@ public class MainForm {
         colTelefon.setCellValueFactory(new PropertyValueFactory<>("telefon"));
         TableColumn<Psihoterapeut, String> colEmail = new TableColumn<>("Email");
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        TableColumn<Psihoterapeut, Integer> colOblastId = new TableColumn<>("Oblast ID");
-        colOblastId.setCellValueFactory(new PropertyValueFactory<>("oblastId"));
+        TableColumn<Psihoterapeut, String> colOblast = new TableColumn<>("Oblast");
+        colOblast.setCellValueFactory(new PropertyValueFactory<>("oblastNaziv"));
         TableColumn<Psihoterapeut, LocalDate> colDatumSert = new TableColumn<>("Datum Sertifikacije");
         colDatumSert.setCellValueFactory(new PropertyValueFactory<>("datumSertifikacije"));
 
         table.getColumns().addAll(
                 colId, colIme, colPrezime,
                 colJmbg, colDatumRodjenja, colPrebivaliste,
-                colTelefon, colEmail, colOblastId, colDatumSert
+                colTelefon, colEmail, colOblast, colDatumSert
         );
 
         // Učitavanje podataka
@@ -73,7 +73,15 @@ public class MainForm {
         Button btnUpcoming = new Button("Buduce seanse");
         Button btnPayments = new Button("Uplate");
 
-        btnProfile.setOnAction(e -> new TherapistProfileForm(stage, loggedIn));
+        btnProfile.setOnAction(e -> {
+            Psihoterapeut sel = table.getSelectionModel().getSelectedItem();
+            if (sel != null) {
+                new TherapistProfileForm(stage, sel);
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Молим, изаберите терапеута из табеле")
+                        .showAndWait();
+            }
+        });
         btnClients.setOnAction(e -> new ClientSignupsForm(stage, loggedIn));
         btnPastSessions.setOnAction(e -> new SessionHistoryForm(stage, loggedIn));
         btnUpcoming.setOnAction(e -> new UpcomingSessionsForm(stage, loggedIn));

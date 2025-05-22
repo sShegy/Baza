@@ -7,21 +7,21 @@ public class Klijent {
     private int id;
     private String ime;
     private String prezime;
-    private String jmbg;
-    private LocalDate datumRodjenja;
-    private String prebivaliste;
+    private String pol;
+    private String datumRodjenja;
     private String telefon;
     private String email;
+    private int imao_psihoterapiju;
+    private String opis_problema;
 
     public Klijent() {}
 
-    public Klijent(String ime, String prezime, String jmbg, LocalDate datumRodjenja,
+    public Klijent(String ime, String prezime, String pol, String datumRodjenja,
                    String prebivaliste, String telefon, String email) {
         this.ime = ime;
         this.prezime = prezime;
-        this.jmbg = jmbg;
+        this.pol = pol;
         this.datumRodjenja = datumRodjenja;
-        this.prebivaliste = prebivaliste;
         this.telefon = telefon;
         this.email = email;
     }
@@ -51,27 +51,19 @@ public class Klijent {
     }
 
     public String getJmbg() {
-        return jmbg;
+        return pol;
     }
 
     public void setJmbg(String jmbg) {
-        this.jmbg = jmbg;
+        this.pol = pol;
     }
 
-    public LocalDate getDatumRodjenja() {
+    public String getDatumRodjenja() {
         return datumRodjenja;
     }
 
-    public void setDatumRodjenja(LocalDate datumRodjenja) {
+    public void setDatumRodjenja(String datumRodjenja) {
         this.datumRodjenja = datumRodjenja;
-    }
-
-    public String getPrebivaliste() {
-        return prebivaliste;
-    }
-
-    public void setPrebivaliste(String prebivaliste) {
-        this.prebivaliste = prebivaliste;
     }
 
     public String getTelefon() {
@@ -89,4 +81,16 @@ public class Klijent {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPol() {return pol;}
+
+    public void setPol(String pol) {this.pol = pol;}
+
+    public int getImao_psihoterapiju() {return imao_psihoterapiju;}
+
+    public void setImao_psihoterapiju(int imao_psihoterapiju) {this.imao_psihoterapiju = imao_psihoterapiju;}
+
+    public String getOpis_problema() {return opis_problema;}
+
+    public void setOpis_problema(String opis_problema) {this.opis_problema = opis_problema;}
 }

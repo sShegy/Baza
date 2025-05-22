@@ -27,64 +27,56 @@ public class SessionDetailsForm {
     }
 
     private void initUI() {
-        // Gornji deo: detalji seanse
         GridPane info = new GridPane();
         info.setPadding(new Insets(10));
         info.setHgap(10);
         info.setVgap(10);
-        info.add(new Label("Datum:"), 0, 0);
-        info.add(new Label(seansa.getDatum().toString()), 1, 0);
-        info.add(new Label("Vreme:"), 0, 1);
-        info.add(new Label(seansa.getVreme().toString()), 1, 1);
-        info.add(new Label("Trajanje:"), 0, 2);
-        info.add(new Label(seansa.getTrajanje() + " min"), 1, 2);
 
-        // Beleške
-        Label lblNotes = new Label("Beleške:");
-        TextArea taNotes = new TextArea(seansa.getBeleške());
+        Label lblTitle = new Label("Detalji seanse");
+        lblTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        info.add(lblTitle, 0, 0, 2, 1);
+
+        info.add(new Label("Seansa ID:"),            0, 1);
+        info.add(new Label(String.valueOf(seansa.getId())), 1, 1);
+
+        info.add(new Label("Клијент:"),               0, 2);
+        info.add(new Label(seansa.getKlijentFullName()), 1, 2);
+
+        info.add(new Label("Терапеут:"),              0, 3);
+        info.add(new Label(seansa.getTerapeutFullName()), 1, 3);
+
+        info.add(new Label("Vodeći korisnik:"),       0, 4);
+        info.add(new Label(String.valueOf(seansa.getVodeci_korisnik())), 1, 4);
+
+        info.add(new Label("Pod supervizijom:"),     0, 5);
+        info.add(new Label(seansa.getPod_supervizijom() == 1 ? "Да" : "Не"), 1, 5);
+
+        info.add(new Label("Datum:"),                 0, 6);
+        info.add(new Label(seansa.getDatum().toString()), 1, 6);
+
+        info.add(new Label("Vreme:"),                 0, 7);
+        info.add(new Label(seansa.getVreme().toString()), 1, 7);
+
+        info.add(new Label("Trajanje (min):"),         0, 8);
+        info.add(new Label(String.valueOf(seansa.getTrajanje())), 1, 8);
+
+        info.add(new Label("Beleške:"),               0, 9);
+        TextArea taNotes = new TextArea(seansa.getBeleske());
         taNotes.setEditable(false);
         taNotes.setWrapText(true);
-        taNotes.setPrefRowCount(5);
+        taNotes.setPrefRowCount(3);
+        info.add(taNotes,                             1, 9);
 
-        // Testovi
-        TableView<Object> tblTests = new TableView<>();
-        // TODO: Definiši model klase za testove (PsiholoskiTest, RezultatTesta)
-        // Ovde bi se dodale kolone i podaci
-        tblTests.setPlaceholder(new Label("Nema podataka o testovima"));
-
-        // Publikacije
-        TableView<Object> tblPublikacije = new TableView<>();
-        // TODO: Definiši model klase za objave (kome, kada, razlog)
-        tblPublikacije.setPlaceholder(new Label("Nema podataka o objavama"));
-
-        // Nazad dugme
         Button btnBack = new Button("Nazad");
         btnBack.setOnAction(e -> new SessionHistoryForm(stage, therapist));
         HBox controls = new HBox(10, btnBack);
         controls.setPadding(new Insets(10));
 
-        // Kompleksni raspored
         BorderPane root = new BorderPane();
         root.setTop(info);
-        BorderPane.setMargin(info, new Insets(10));
-        root.setCenter(taNotes);
-        BorderPane.setMargin(taNotes, new Insets(10));
+        root.setBottom(controls);
 
-        // Donja polovina: split između testova i publikacija
-        TabPane tabs = new TabPane();
-        Tab tabTests = new Tab("Testovi", tblTests);
-        Tab tabPubl = new Tab("Objave", tblPublikacije);
-        tabs.getTabs().addAll(tabTests, tabPubl);
-        tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        root.setBottom(tabs);
-        root.setPrefSize(800, 600);
-
-        // Glavna scena
-        BorderPane main = new BorderPane();
-        main.setCenter(root);
-        main.setBottom(controls);
-
-        Scene scene = new Scene(main);
+        Scene scene = new Scene(root, 500, 450);
         stage.setScene(scene);
         stage.setTitle("Detalji seanse - " + seansa.getDatum());
         stage.show();

@@ -5,4 +5,5 @@ open module Baza {
     requires javafx.graphics;
     // ако користиш FXML:
     requires javafx.fxml;
+    requires jdk.jdi;
 }

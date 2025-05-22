@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -40,24 +41,71 @@ public class SessionHistoryForm {
         TableColumn<Seansa, Integer> colTrajanje = new TableColumn<>("Trajanje (min)");
         colTrajanje.setCellValueFactory(new PropertyValueFactory<>("trajanje"));
         TableColumn<Seansa, String>  colBeleske = new TableColumn<>("Beleške");
-        colBeleske.setCellValueFactory(new PropertyValueFactory<>("beleške"));
-        table.getColumns().addAll(colDatum, colVreme, colTrajanje, colBeleske);
+        colBeleske.setCellValueFactory(new PropertyValueFactory<>("beleske"));
+        TableColumn<Seansa, Integer> colSeansaId = new TableColumn<>("Seansa ID");
+        colSeansaId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Seansa, Integer> colKlijentId = new TableColumn<>("Klijent ID");
+        colKlijentId.setCellValueFactory(new PropertyValueFactory<>("klijentId"));
+        TableColumn<Seansa, Integer> colVodeci = new TableColumn<>("Vodeći korisnik");
+        colVodeci.setCellValueFactory(new PropertyValueFactory<>("vodeci_korisnik"));
+        TableColumn<Seansa, Integer> colSupervizija = new TableColumn<>("Pod supervizijom");
+        colSupervizija.setCellValueFactory(new PropertyValueFactory<>("pod_supervizijom"));
+        TableColumn<Seansa, Integer> colPsihoterapeut = new TableColumn<>("Psihoterapeut ID");
+        colPsihoterapeut.setCellValueFactory(new PropertyValueFactory<>("psihoterapeutId"));
 
-        // Učitaj sve seanse, filtriraj po terapeut id i prošlom datumu
+        TableColumn<Seansa,String> colKlijent = new TableColumn<>("Клијент");
+        colKlijent.setCellValueFactory(new PropertyValueFactory<>("klijentFullName"));
+
+        TableColumn<Seansa,String> colTerapeut = new TableColumn<>("Терапеут");
+        colTerapeut.setCellValueFactory(new PropertyValueFactory<>("terapeutFullName"));
+
+        table.getColumns().addAll(colSeansaId, colKlijent, colTerapeut, colVodeci, colSupervizija, colDatum, colVreme, colTrajanje, colBeleske);
+
+        colSupervizija.setCellFactory(tc -> new TableCell<Seansa, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    // ако је 1 -> "Да", иначе "Не"
+                    setText(item == 1 ? "Да" : "Не");
+                }
+            }
+        });
+
         try {
-            List<Seansa> all = new SeansaDAO().findAll();
-            List<Seansa> past = all.stream()
-                    .filter(s -> s.getPsihoterapeutId() == therapist.getId())
-                    .filter(s -> s.getDatum().isBefore(LocalDate.now()))
-                    .collect(Collectors.toList());
+            List<Seansa> all = new SeansaDAO().findPastByTherapist(therapist.getId());
+            List<Seansa> past = all;
             table.setItems(FXCollections.observableArrayList(past));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         Button btnBack = new Button("Nazad");
+        Button btnDetails = new Button("Detalji");
+        Button btnPublish = new Button("Објави сеансу");
+
+        btnPublish.setOnAction(e -> {
+            Seansa selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                new SessionPublishForm(stage, therapist, selected);
+            }
+        });
         btnBack.setOnAction(e -> new MainForm(stage, therapist));
-        HBox hbox = new HBox(10, btnBack);
+
+        btnDetails.disableProperty().bind(
+                table.getSelectionModel().selectedItemProperty().isNull()
+        );
+
+        btnDetails.setOnAction(e -> {
+            Seansa selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                new SessionDetailsForm(stage, therapist, selected);
+            }
+        });
+
+        HBox hbox = new HBox(10, btnDetails,btnPublish, btnBack);
         hbox.setPadding(new Insets(10));
 
         BorderPane root = new BorderPane();

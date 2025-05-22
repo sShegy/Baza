@@ -38,7 +38,25 @@ public class PsihoterapeutDAO {
     }
 
     public Psihoterapeut findById(int id) throws SQLException {
-        String sql = "SELECT * FROM psihoterapeut WHERE id = ?";
+        String sql = """
+            SELECT
+              p.psihoterapeut_id,
+              p.ime,
+              p.prezime,
+              p.jmbg,
+              p.datum_rodjenja,
+              p.prebivaliste,
+              p.telefon,
+              p.email,
+              p.oblast_id,
+              o.naziv AS oblast_naziv,
+              p.datum_sertifikacije,
+              p.password
+            FROM psihoterapeut p
+            LEFT JOIN oblast_psihoterapije o
+              ON p.oblast_id = o.oblast_id
+            WHERE p.psihoterapeut_id = ?
+    """;
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -53,7 +71,26 @@ public class PsihoterapeutDAO {
     }
 
     public Psihoterapeut findByEmailAndPassword(String email, String password) throws SQLException {
-        String sql = "SELECT * FROM psihoterapeut WHERE email = ? AND password = ?";
+        String sql = """
+            SELECT
+          p.psihoterapeut_id,
+          p.ime,
+          p.prezime,
+          p.jmbg,
+          p.datum_rodjenja,
+          p.prebivaliste,
+          p.telefon,
+          p.email,
+          p.oblast_id,
+          o.naziv AS oblast_naziv,
+          p.datum_sertifikacije,
+          p.password
+            FROM psihoterapeut p
+            LEFT JOIN oblast_psihoterapije o
+            ON p.oblast_id = o.oblast_id
+            WHERE p.email = ? AND p.password = ?
+            LIMIT 1
+        """;
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -69,7 +106,25 @@ public class PsihoterapeutDAO {
     }
 
     public List<Psihoterapeut> findAll() throws SQLException {
-        String sql = "SELECT * FROM psihoterapeut";
+            String sql = """
+                    SELECT
+                    p.psihoterapeut_id,
+                    p.ime,
+                    p.prezime,
+                    p.jmbg,
+                    p.datum_rodjenja,
+                    p.prebivaliste,
+                    p.telefon,
+                    p.email,
+                    p.oblast_id,
+                    o.naziv AS oblast_naziv,
+                    p.datum_sertifikacije,
+                    p.password
+                    FROM psihoterapeut p
+                    LEFT JOIN oblast_psihoterapije o
+                    ON p.oblast_id = o.oblast_id                                 
+                    """;
+
         List<Psihoterapeut> lista = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
              Statement st = conn.createStatement();
@@ -118,7 +173,7 @@ public class PsihoterapeutDAO {
 
     private Psihoterapeut mapRow(ResultSet rs) throws SQLException {
         Psihoterapeut p = new Psihoterapeut();
-        p.setId(rs.getInt("id"));
+        p.setId(rs.getInt("psihoterapeut_id"));
         p.setIme(rs.getString("ime"));
         p.setPrezime(rs.getString("prezime"));
         p.setJmbg(rs.getString("jmbg"));
@@ -127,6 +182,7 @@ public class PsihoterapeutDAO {
         p.setTelefon(rs.getString("telefon"));
         p.setEmail(rs.getString("email"));
         p.setOblastId(rs.getInt("oblast_id"));
+        p.setOblastNaziv(rs.getString("oblast_naziv"));
         p.setDatumSertifikacije(rs.getDate("datum_sertifikacije").toLocalDate());
         p.setPassword(rs.getString("password"));
         return p;

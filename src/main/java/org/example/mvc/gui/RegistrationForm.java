@@ -1,6 +1,7 @@
 // src/main/java/org/example/mvc/gui/RegistrationForm.java
 package org.example.mvc.gui;
 
+import java.sql.Connection;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -8,7 +9,12 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.example.mvc.dao.PsihoterapeutDAO;
 import org.example.mvc.model.Psihoterapeut;
+import org.example.mvc.util.DBUtil;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
