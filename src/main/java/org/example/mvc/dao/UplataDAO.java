@@ -13,13 +13,13 @@ import java.util.List;
 
 public class UplataDAO {
     public void save(Uplata u) throws SQLException {
-        String sql = "INSERT INTO uplata (klijent_id, svrha, rata, valuta, nacin, iznos) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO placanje (klijent_id, svrha, rata, valuta, nacin, iznos) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, u.getKlijentId());
             ps.setString(2, u.getSvrha());
             if (u.getRata() != null) ps.setInt(3, u.getRata()); else ps.setNull(3, Types.INTEGER);
-            ps.setString(4, u.getValuta());
+            ps.setInt(4, u.getValuta_id());
             ps.setString(5, u.getNacin());
             ps.setBigDecimal(6, u.getIznos());
             ps.executeUpdate();
@@ -28,7 +28,7 @@ public class UplataDAO {
     }
 
     public Uplata findById(int id) throws SQLException {
-        String sql = "SELECT * FROM uplata WHERE id = ?";
+        String sql = "SELECT * FROM placanje WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -39,7 +39,7 @@ public class UplataDAO {
                     u.setKlijentId(rs.getInt("klijent_id"));
                     u.setSvrha(rs.getString("svrha"));
                     int r = rs.getInt("rata"); if (!rs.wasNull()) u.setRata(r);
-                    u.setValuta(rs.getString("valuta"));
+                    u.setValuta_id(rs.getInt("valuta_id"));
                     u.setNacin(rs.getString("nacin"));
                     u.setIznos(rs.getBigDecimal("iznos"));
                     return u;
@@ -50,20 +50,23 @@ public class UplataDAO {
     }
 
     public List<Uplata> findAll() throws SQLException {
-        String sql = "SELECT * FROM uplata";
+        String sql = "SELECT * FROM placanje";
         List<Uplata> list = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Uplata u = new Uplata();
-                u.setId(rs.getInt("id"));
+                u.setId(rs.getInt("placanje_id"));
                 u.setKlijentId(rs.getInt("klijent_id"));
                 u.setSvrha(rs.getString("svrha"));
                 int r2 = rs.getInt("rata"); if (!rs.wasNull()) u.setRata(r2);
-                u.setValuta(rs.getString("valuta"));
-                u.setNacin(rs.getString("nacin"));
+                u.setValuta_id(rs.getInt("valuta_id"));
+                u.setNacin(rs.getString("nacin_placanja"));
                 u.setIznos(rs.getBigDecimal("iznos"));
+                u.setDatum(rs.getString("datum"));
+                u.setSeansa_id(rs.getInt("seansa_id"));
+
                 list.add(u);
             }
         }
@@ -71,13 +74,13 @@ public class UplataDAO {
     }
 
     public void update(Uplata u) throws SQLException {
-        String sql = "UPDATE uplata SET klijent_id=?, svrha=?, rata=?, valuta=?, nacin=?, iznos=? WHERE id=?";
+        String sql = "UPDATE placanje SET klijent_id=?, svrha=?, rata=?, valuta=?, nacin=?, iznos=? WHERE id=?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, u.getKlijentId());
             ps.setString(2, u.getSvrha());
             if (u.getRata() != null) ps.setInt(3, u.getRata()); else ps.setNull(3, Types.INTEGER);
-            ps.setString(4, u.getValuta());
+            ps.setInt(4, u.getValuta_id());
             ps.setString(5, u.getNacin());
             ps.setBigDecimal(6, u.getIznos());
             ps.setInt(7, u.getId());
@@ -86,7 +89,7 @@ public class UplataDAO {
     }
 
     public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM uplata WHERE id = ?";
+        String sql = "DELETE FROM placanje WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);

@@ -41,7 +41,7 @@ public class SessionDetailsForm {
 
         // Beleške
         Label lblNotes = new Label("Beleške:");
-        TextArea taNotes = new TextArea(seansa.getBeleške());
+        TextArea taNotes = new TextArea(seansa.getBeleske());
         taNotes.setEditable(false);
         taNotes.setWrapText(true);
         taNotes.setPrefRowCount(5);

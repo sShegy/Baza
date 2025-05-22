@@ -40,16 +40,27 @@ public class SessionHistoryForm {
         TableColumn<Seansa, Integer> colTrajanje = new TableColumn<>("Trajanje (min)");
         colTrajanje.setCellValueFactory(new PropertyValueFactory<>("trajanje"));
         TableColumn<Seansa, String>  colBeleske = new TableColumn<>("Beleške");
-        colBeleske.setCellValueFactory(new PropertyValueFactory<>("beleške"));
-        table.getColumns().addAll(colDatum, colVreme, colTrajanje, colBeleske);
+        colBeleske.setCellValueFactory(new PropertyValueFactory<>("beleske"));
+        TableColumn<Seansa, Integer> colSeansaId = new TableColumn<>("Seansa ID");
+        colSeansaId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Seansa, Integer> colKlijentId = new TableColumn<>("Klijent ID");
+        colKlijentId.setCellValueFactory(new PropertyValueFactory<>("klijentId"));
+        TableColumn<Seansa, Integer> colVodeci = new TableColumn<>("Vodeći korisnik");
+        colVodeci.setCellValueFactory(new PropertyValueFactory<>("vodeci_korisnik"));
+        TableColumn<Seansa, Integer> colSupervizija = new TableColumn<>("Pod supervizijom");
+        colSupervizija.setCellValueFactory(new PropertyValueFactory<>("pod_supervizijom"));
+        TableColumn<Seansa, Integer> colPsihoterapeut = new TableColumn<>("Psihoterapeut ID");
+        colPsihoterapeut.setCellValueFactory(new PropertyValueFactory<>("psihoterapeutId"));
+
+        table.getColumns().addAll(colSeansaId, colKlijentId, colPsihoterapeut, colVodeci, colSupervizija, colDatum, colVreme, colTrajanje, colBeleske);
 
         // Učitaj sve seanse, filtriraj po terapeut id i prošlom datumu
         try {
             List<Seansa> all = new SeansaDAO().findAll();
-            List<Seansa> past = all.stream()
+            List<Seansa> past = all;/*.stream()
                     .filter(s -> s.getPsihoterapeutId() == therapist.getId())
                     .filter(s -> s.getDatum().isBefore(LocalDate.now()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList());*/
             table.setItems(FXCollections.observableArrayList(past));
         } catch (Exception e) {
             e.printStackTrace();

@@ -22,7 +22,7 @@ public class SeansaDAO {
             ps.setDate(3, Date.valueOf(s.getDatum()));
             ps.setTime(4, Time.valueOf(s.getVreme()));
             ps.setInt(5, s.getTrajanje());
-            ps.setString(6, s.getBeleške());
+            ps.setString(6, s.getBeleske());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) s.setId(rs.getInt(1));
@@ -44,7 +44,7 @@ public class SeansaDAO {
                     s.setDatum(rs.getDate("datum").toLocalDate());
                     s.setVreme(rs.getTime("vreme").toLocalTime());
                     s.setTrajanje(rs.getInt("trajanje"));
-                    s.setBeleške(rs.getString("beleške"));
+                    s.setBeleske(rs.getString("beleške"));
                     return s;
                 }
             }
@@ -60,13 +60,15 @@ public class SeansaDAO {
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Seansa s = new Seansa();
-                s.setId(rs.getInt("id"));
+                s.setId(rs.getInt("seansa_id"));
                 s.setPsihoterapeutId(rs.getInt("psihoterapeut_id"));
                 s.setKlijentId(rs.getInt("klijent_id"));
                 s.setDatum(rs.getDate("datum").toLocalDate());
                 s.setVreme(rs.getTime("vreme").toLocalTime());
-                s.setTrajanje(rs.getInt("trajanje"));
-                s.setBeleške(rs.getString("beleške"));
+                s.setTrajanje(rs.getInt("trajanje_min"));
+                s.setBeleske(rs.getString("beleske"));
+                s.setPod_supervizijom(rs.getInt("pod_supervizijom"));
+                s.setVodeci_korisnik(rs.getInt("vodeci_korisnik"));
                 list.add(s);
             }
         }
@@ -82,7 +84,7 @@ public class SeansaDAO {
             ps.setDate(3, Date.valueOf(s.getDatum()));
             ps.setTime(4, Time.valueOf(s.getVreme()));
             ps.setInt(5, s.getTrajanje());
-            ps.setString(6, s.getBeleške());
+            ps.setString(6, s.getBeleske());
             ps.setInt(7, s.getId());
             ps.executeUpdate();
         }

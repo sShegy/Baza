@@ -15,6 +15,7 @@ import org.example.mvc.dao.KlijentDAO;
 import org.example.mvc.model.Klijent;
 import org.example.mvc.model.Psihoterapeut;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ClientSignupsForm {
@@ -39,8 +40,16 @@ public class ClientSignupsForm {
         colTelefon.setCellValueFactory(new PropertyValueFactory<>("telefon"));
         TableColumn<Klijent, String> colEmail = new TableColumn<>("Email");
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        TableColumn<Klijent, String> colDatumRodjenja = new TableColumn<>("Datum rođenja");
+        colDatumRodjenja.setCellValueFactory(new PropertyValueFactory<>("datumRodjenja"));
+        TableColumn<Klijent, Integer> colImaoPsihoterapiju = new TableColumn<>("Imao psihoterapiju");
+        colImaoPsihoterapiju.setCellValueFactory(new PropertyValueFactory<>("imao_psihoterapiju"));
+        TableColumn<Klijent, String> colOpisProblema = new TableColumn<>("Opis problema");
+        colOpisProblema.setCellValueFactory(new PropertyValueFactory<>("opis_problema"));
+        TableColumn<Klijent, String> colPol = new TableColumn<>("Pol");
+        colPol.setCellValueFactory(new PropertyValueFactory<>("pol"));
 
-        table.getColumns().addAll(colId, colIme, colPrezime, colTelefon, colEmail);
+        table.getColumns().addAll(colId, colIme, colPrezime,colDatumRodjenja,colPol, colTelefon, colEmail, colImaoPsihoterapiju, colOpisProblema);
 
         try {
             List<Klijent> list = new KlijentDAO().findAll();

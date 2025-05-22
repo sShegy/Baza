@@ -118,7 +118,7 @@ public class PsihoterapeutDAO {
 
     private Psihoterapeut mapRow(ResultSet rs) throws SQLException {
         Psihoterapeut p = new Psihoterapeut();
-        p.setId(rs.getInt("id"));
+        p.setId(rs.getInt("psihoterapeut_id"));
         p.setIme(rs.getString("ime"));
         p.setPrezime(rs.getString("prezime"));
         p.setJmbg(rs.getString("jmbg"));
