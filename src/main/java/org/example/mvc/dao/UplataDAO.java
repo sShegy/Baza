@@ -59,7 +59,7 @@ public class UplataDAO {
           p.rata,
           p.valuta_id,
           v.puni_naziv          AS vnaziv,
-          p.nacin_placanja,
+          p.nacin_placanja AS nacin,
           p.iznos,
           p.datum,
           p.seansa_id
@@ -89,7 +89,7 @@ public class UplataDAO {
                 u.setValuta_id(rs.getInt("valuta_id"));
                 u.setValutaNaziv(rs.getString("vnaziv"));
 
-                u.setNacin(rs.getString("nacin_placanja "));
+                u.setNacin(rs.getString("nacin"));
                 u.setIznos(rs.getBigDecimal("iznos"));
                 u.setDatum(rs.getString("datum"));
                 u.setSeansa_id(rs.getInt("seansa_id"));
